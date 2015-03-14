@@ -2,16 +2,13 @@
 
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xmlns:spring="http://www.springframework.org/schema/beans"
       xmlns:tellstick="http://www.mulesoft.org/schema/mule/tellstick"
-      xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
-        http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+      xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
         http://www.mulesoft.org/schema/mule/tellstick http://www.mulesoft.org/schema/mule/tellstick/current/mule-tellstick.xsd">
 
-    <tellstick:config-type name="config" myProperty="Some string"/>
+    <tellstick:config name="tellstick"/>
 
-    <flow name="testFlow">
-        <tellstick:my-processor config-ref="config" content="Another string"/>
+    <flow name="testGetDevices">
+        <tellstick:get-devices config-ref="tellstick"/>
     </flow>
 </mule>

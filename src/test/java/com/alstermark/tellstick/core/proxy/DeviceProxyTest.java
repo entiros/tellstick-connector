@@ -1,5 +1,6 @@
 package com.alstermark.tellstick.core.proxy;
 
+import com.alstermark.tellstick.core.device.*;
 import com.jayway.awaitility.Awaitility;
 import org.junit.After;
 import org.junit.Before;
@@ -10,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
+import static org.junit.Assert.assertEquals;
 
 public class DeviceProxyTest {
     public static final int TRIES = 3;

@@ -5,9 +5,13 @@
 
 package com.alstermark.modules.tellstick;
 
+import com.alstermark.tellstick.core.device.Device;
 import org.mule.modules.tests.ConnectorTestCase;
 
 import org.junit.Test;
+
+import java.util.Collections;
+import java.util.List;
 
 public class TellstickConnectorTest extends ConnectorTestCase {
     
@@ -17,7 +21,9 @@ public class TellstickConnectorTest extends ConnectorTestCase {
     }
 
     @Test
-    public void testFlow() throws Exception {
-        runFlowAndExpect("testFlow", "Another string");
+    public void testGetDevices() throws Exception {
+        List<Device> devices = (List<Device>) runFlow("testGetDevices").getMessage().getPayload();
+
+        System.out.println(devices);
     }
 }

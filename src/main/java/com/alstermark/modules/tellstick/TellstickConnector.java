@@ -13,6 +13,7 @@ import com.alstermark.tellstick.core.sensor.Sensor;
 import com.alstermark.tellstick.core.sensor.SensorEventListener;
 import org.apache.log4j.Logger;
 import org.mule.api.annotations.Connector;
+import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.Source;
 import org.mule.api.annotations.lifecycle.Start;
@@ -29,7 +30,7 @@ import java.util.Map;
  *
  * @author Petter Alstermark
  */
-@Connector(name = "tellstick", friendlyName = "Tellstick", schemaVersion = "current")
+@Module(name = "tellstick", friendlyName = "Tellstick", schemaVersion = "current")
 public class TellstickConnector {
     private static final Logger logger = Logger.getLogger(TellstickConnector.class);
 
@@ -37,13 +38,13 @@ public class TellstickConnector {
 
 
     @Start
-    public void start() {
+    public void doStart() {
         tellstick = new Tellstick();
         tellstick.start();
     }
 
     @Stop
-    public void stop() {
+    public void doStop() {
         if (this.tellstick != null) {
             tellstick.stop();
             tellstick = null;
@@ -98,17 +99,17 @@ public class TellstickConnector {
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:create-device}
      *
-     * @param name       name
-     * @param model      model
-     * @param protocol   protocol
-     * @param parameters parameters
+     * @param deviceName device name
+     * @param model      device model
+     * @param protocol   device protocol
+     * @param parameters device parameters
      * @return created device
      * @throws TellstickException          if device could not be created
      * @throws DeviceNotSupportedException if the device type is not supported by the connector
      */
     @Processor
-    public Device createDevice(String name, String model, String protocol, Map<String, String> parameters) throws TellstickException, DeviceNotSupportedException {
-        return tellstick.getDeviceHandler().createDevice(name, model, protocol, parameters);
+    public Device createDevice(String deviceName, String model, String protocol, Map<String, String> parameters) throws TellstickException, DeviceNotSupportedException {
+        return tellstick.getDeviceHandler().createDevice(deviceName, model, protocol, parameters);
     }
 
     /**

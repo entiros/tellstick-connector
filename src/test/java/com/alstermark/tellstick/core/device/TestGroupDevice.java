@@ -26,4 +26,9 @@ public class TestGroupDevice extends AbstractTestDevice implements GroupDevice {
     public void off() {
         counter--;
     }
+
+    @Override
+    public boolean isOn() {
+        throw new RuntimeException("Not implemented for GroupDevice");
+    }
 }
