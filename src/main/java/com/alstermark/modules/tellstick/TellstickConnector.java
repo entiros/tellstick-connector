@@ -30,7 +30,7 @@ import java.util.Map;
  *
  * @author Petter Alstermark
  */
-@Module(name = "tellstick", friendlyName = "Tellstick", schemaVersion = "current")
+@Module(name = "tellstick", friendlyName = "Tellstick", schemaVersion = "current", minMuleVersion = "3.5.0")
 public class TellstickConnector {
     private static final Logger logger = Logger.getLogger(TellstickConnector.class);
 
