@@ -52,7 +52,7 @@ public class TellstickConnector {
 
     /**
      * Get available devices
-     *
+     * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:get-devices}
      *
      * @return device list
@@ -62,11 +62,28 @@ public class TellstickConnector {
         return tellstick.getDeviceHandler().getDevices();
     }
 
+    /**
+     * Get device by ID
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:get-device}
+     *
+     * @param deviceId device ID
+     * @return device
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     */
     @Processor
     public Device getDevice(int deviceId) throws DeviceNotSupportedException {
         return tellstick.getDeviceHandler().getDevice(deviceId);
     }
 
+    /**
+     * Get device by name
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:get-device-by-name}
+     *
+     * @param deviceName device name
+     * @return device
+     */
     @Processor
     public Device getDeviceByName(String deviceName) {
         for (Device device : tellstick.getDeviceHandler().getDevices()) {
@@ -76,16 +93,45 @@ public class TellstickConnector {
         return null;
     }
 
+    /**
+     * Create device
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:create-device}
+     *
+     * @param name       name
+     * @param model      model
+     * @param protocol   protocol
+     * @param parameters parameters
+     * @return created device
+     * @throws TellstickException          if device could not be created
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     */
     @Processor
     public Device createDevice(String name, String model, String protocol, Map<String, String> parameters) throws TellstickException, DeviceNotSupportedException {
         return tellstick.getDeviceHandler().createDevice(name, model, protocol, parameters);
     }
 
+    /**
+     * Remove device
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:remove-device}
+     *
+     * @param deviceId device ID
+     * @return true if device was removed, false otherwise
+     */
     @Processor
     public boolean removeDevice(int deviceId) {
         return tellstick.getDeviceHandler().removeDevice(deviceId);
     }
 
+    /**
+     * Device changed source
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:device-changed}
+     *
+     * @param callback the callback where the updated device will be processed
+     * @return stop source callback
+     */
     @Source
     public StopSourceCallback deviceChanged(final SourceCallback callback) {
         // Device Listener
@@ -120,6 +166,14 @@ public class TellstickConnector {
         };
     }
 
+    /**
+     * Device added source
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:device-added}
+     *
+     * @param callback the callback where the added device will be processed
+     * @return stop source callback
+     */
     @Source
     public StopSourceCallback deviceAdded(final SourceCallback callback) {
         // Device Listener
@@ -154,6 +208,14 @@ public class TellstickConnector {
         };
     }
 
+    /**
+     * Device removed source
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:device-removed}
+     *
+     * @param callback the callback where the ID for the removed device will be processed
+     * @return stop source callback
+     */
     @Source
     public StopSourceCallback deviceRemoved(final SourceCallback callback) {
         // Device Listener
@@ -188,46 +250,143 @@ public class TellstickConnector {
         };
     }
 
-    @Processor
+    /**
+     * Turn device on, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:on}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "on")
     public void deviceOn(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((OnOffDevice) getDevice(device, deviceId, deviceName)).on();
     }
 
-    @Processor
+    /**
+     * Turn device off, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:off}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "off")
     public void deviceOff(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((OnOffDevice) getDevice(device, deviceId, deviceName)).off();
     }
 
-    @Processor
+    /**
+     * Issue device up command, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:up}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "up")
     public void deviceUp(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((UpDownDevice) getDevice(device, deviceId, deviceName)).up();
     }
 
-    @Processor
+    /**
+     * Issue device down command, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:down}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "down")
     public void deviceDown(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((UpDownDevice) getDevice(device, deviceId, deviceName)).down();
     }
 
-    @Processor
+    /**
+     * Issue device stop command, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:stop}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "stop")
     public void deviceStop(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((UpDownDevice) getDevice(device, deviceId, deviceName)).stop();
     }
 
-    @Processor
+    /**
+     * Issue device bell command, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:bell}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "bell")
     public void deviceBell(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((BellDevice) getDevice(device, deviceId, deviceName)).bell();
     }
 
-    @Processor
+    /**
+     * Set device dim level, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:dim}
+     *
+     * @param level      dim level (0-255)
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "dim")
     public void deviceDim(Integer level, @Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((DimmableDevice) getDevice(device, deviceId, deviceName)).dim(level);
     }
 
-    @Processor
-    public void deviceExecute(Integer level, @Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
+    /**
+     * Issue device execute command, one of device, deviceId or deviceName is required
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:execute}
+     *
+     * @param device     device
+     * @param deviceId   device ID
+     * @param deviceName device name
+     * @throws DeviceNotSupportedException if the device type is not supported by the connector
+     * @throws DeviceException             if unable to perform device action
+     */
+    @Processor(name = "execute")
+    public void deviceExecute(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
         ((SceneDevice) getDevice(device, deviceId, deviceName)).execute();
     }
 
+    /**
+     * Raw event source
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:raw-event}
+     *
+     * @param callback the callback where raw event will be processed as parameter {@link java.util.Map}
+     * @return stop source callback
+     */
     @Source
     public StopSourceCallback rawEvent(final SourceCallback callback) {
         // Device Listener
@@ -254,11 +413,26 @@ public class TellstickConnector {
         };
     }
 
+    /**
+     * Get sensors
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:get-sensors}
+     *
+     * @return sensors
+     */
     @Processor
     public List<Sensor> getSensors() {
         return tellstick.getSensorHandler().getSensors();
     }
 
+    /**
+     * Sensor event source
+     * <p/>
+     * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:sensor-event}
+     *
+     * @param callback the callback where sensor event will be processed as {@link com.alstermark.tellstick.core.sensor.Sensor}
+     * @return stop source callback
+     */
     @Source
     public StopSourceCallback sensorEvent(final SourceCallback callback) {
         // Device Listener

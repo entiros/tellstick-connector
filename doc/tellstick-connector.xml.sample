@@ -1,3 +1,80 @@
 <!-- BEGIN_INCLUDE(tellstick:get-devices) -->
     <tellstick:get-devices/>
 <!-- END_INCLUDE(tellstick:get-devices) -->
+
+<!-- BEGIN_INCLUDE(tellstick:get-device) -->
+    <tellstick:get-device deviceId="#[payload.deviceId]"/>
+<!-- END_INCLUDE(tellstick:get-device) -->
+
+<!-- BEGIN_INCLUDE(tellstick:get-device-by-name) -->
+    <tellstick:get-device-by-name deviceName="#[payload.deviceName]"/>
+<!-- END_INCLUDE(tellstick:get-device-by-name) -->
+
+<!-- BEGIN_INCLUDE(tellstick:create-device) -->
+    <tellstick:create-device name="#[payload.deviceName]" model="#[payload.model]" protocol="#[payload.protocol]" parameters-ref="#[payload.parameters]"/>
+<!-- END_INCLUDE(tellstick:create-device) -->
+
+<!-- BEGIN_INCLUDE(tellstick:remove-device) -->
+    <tellstick:remove-device deviceId="#[payload.deviceId]"/>
+<!-- END_INCLUDE(tellstick:remove-device) -->
+
+<!-- BEGIN_INCLUDE(tellstick:device-changed) -->
+    <tellstick:device-changed/>
+    <logger message="Device ID #[payload.deviceId] changed"/>
+<!-- END_INCLUDE(tellstick:device-changed) -->
+
+<!-- BEGIN_INCLUDE(tellstick:device-added) -->
+    <tellstick:device-added/>
+    <logger message="Device ID #[payload.deviceId] added"/>
+<!-- END_INCLUDE(tellstick:device-added) -->
+
+<!-- BEGIN_INCLUDE(tellstick:device-removed) -->
+    <tellstick:device-removed/>
+    <logger message="Device ID #[payload] removed"/>
+<!-- END_INCLUDE(tellstick:device-removed) -->
+
+<!-- BEGIN_INCLUDE(tellstick:on) -->
+    <tellstick:on deviceId="#[payload.deviceId]"/>
+<!-- END_INCLUDE(tellstick:on) -->
+
+<!-- BEGIN_INCLUDE(tellstick:up) -->
+    <tellstick:up device-ref="#[payload.device]"/>
+<!-- END_INCLUDE(tellstick:up) -->
+
+<!-- BEGIN_INCLUDE(tellstick:up) -->
+    <tellstick:up device-ref="#[payload.device]"/>
+<!-- END_INCLUDE(tellstick:up) -->
+
+<!-- BEGIN_INCLUDE(tellstick:down) -->
+    <tellstick:down deviceName="#[payload.deviceName]"/>
+<!-- END_INCLUDE(tellstick:down) -->
+
+<!-- BEGIN_INCLUDE(tellstick:stop) -->
+    <tellstick:stop deviceName="#[payload.deviceName]"/>
+<!-- END_INCLUDE(tellstick:stop) -->
+
+<!-- BEGIN_INCLUDE(tellstick:bell) -->
+    <tellstick:bell deviceName="#[payload.deviceName]"/>
+<!-- END_INCLUDE(tellstick:bell) -->
+
+<!-- BEGIN_INCLUDE(tellstick:dim) -->
+    <tellstick:dim deviceName="#[payload.deviceName]" level="#[payload.level]"/>
+<!-- END_INCLUDE(tellstick:dim) -->
+
+<!-- BEGIN_INCLUDE(tellstick:execute) -->
+    <tellstick:execute deviceName="#[payload.deviceName]"/>
+<!-- END_INCLUDE(tellstick:execute) -->
+
+<!-- BEGIN_INCLUDE(tellstick:raw-event) -->
+    <tellstick:raw-event/>
+    <logger message="Raw event parameters: #[payload]"/>
+<!-- END_INCLUDE(tellstick:raw-event) -->
+
+<!-- BEGIN_INCLUDE(tellstick:get-sensors) -->
+    <tellstick:get-sensors/>
+<!-- END_INCLUDE(tellstick:get-sensors) -->
+
+<!-- BEGIN_INCLUDE(tellstick:sensor-event) -->
+    <tellstick:sensor-event/>
+    <logger message="Sensor event: #[payload]"/>
+<!-- END_INCLUDE(tellstick:sensor-event) -->
