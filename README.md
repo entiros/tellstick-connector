@@ -11,7 +11,7 @@ For released connectors you can download them from the update site in Studio.
 Open MuleStudio, go to Help → Install New Software and select MuleStudio Cloud Connectors Update Site where you’ll find all avaliable connectors.
 
 #Usage
-For information about usage our documentation at http://github.com/alstermark/tellstick.
+For information about usage our documentation at http://github.com/entiros/tellstick-connector.
 
 # Reporting Issues
-You can report new issues at this link http://github.com/alstermark/tellstick/issues.
+You can report new issues at this link http://github.com/entiros/tellstick-connector/issues.
