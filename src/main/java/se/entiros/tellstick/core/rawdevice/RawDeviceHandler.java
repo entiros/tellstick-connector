@@ -37,7 +37,7 @@ public class RawDeviceHandler {
     public static final String ON = "turnon";
     public static final String OFF = "turnoff";
 
-    private final Set<RawDeviceEventListener> rawDeviceEventListeners = new CopyOnWriteArraySet<>();
+    private final Set<RawDeviceEventListener> rawDeviceEventListeners = new CopyOnWriteArraySet<RawDeviceEventListener>();
 
     private final TellstickCoreLibrary library;
 
@@ -47,7 +47,7 @@ public class RawDeviceHandler {
     @SuppressWarnings("FieldCanBeLocal")
     private TDRawDeviceEventListener rawDeviceEventListener;
 
-    private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<>(TIMEOUT);
+    private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>(TIMEOUT);
 
     public RawDeviceHandler(TellstickCoreLibrary library) {
         this.library = library;
@@ -132,7 +132,7 @@ public class RawDeviceHandler {
 
         String[] split = data.split(DELIMITER_MAJOR);
 
-        Map<String, String> parameters = new HashMap<>();
+        Map<String, String> parameters = new HashMap<String, String>();
         parameters.put("controllerId", Integer.toString(controllerId));
         for (String string : split) {
             String[] pair = string.split(DELIMITER_MINOR);

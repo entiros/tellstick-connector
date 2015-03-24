@@ -24,8 +24,8 @@ public final class DeviceProxy {
 
     private static DeviceProxy instance;
 
-    private final Map<Integer, DeviceMethodCall> deviceMethodCallsMap = new LinkedHashMap<>();
-    private final BlockingQueue<Integer> queue = new LinkedBlockingQueue<>();
+    private final Map<Integer, DeviceMethodCall> deviceMethodCallsMap = new LinkedHashMap<Integer, DeviceMethodCall>();
+    private final BlockingQueue<Integer> queue = new LinkedBlockingQueue<Integer>();
 
     private int tries = 3;
     private long callDelay = 500;
@@ -211,7 +211,9 @@ public final class DeviceProxy {
 
                     // Delay
                     Thread.sleep(getCallDelay());
-                } catch (IllegalAccessException | InvocationTargetException e) {
+                } catch (IllegalAccessException e) {
+                    logger.error(e);
+                } catch (InvocationTargetException e) {
                     logger.error(e);
                 } catch (InterruptedException e) {
                     logger.debug("Interrupted");

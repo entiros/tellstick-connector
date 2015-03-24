@@ -3,12 +3,99 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xmlns:tellstick="http://www.mulesoft.org/schema/mule/tellstick"
+      xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
       xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-        http://www.mulesoft.org/schema/mule/tellstick http://www.mulesoft.org/schema/mule/tellstick/current/mule-tellstick.xsd">
+        http://www.mulesoft.org/schema/mule/tellstick http://www.mulesoft.org/schema/mule/tellstick/current/mule-tellstick.xsd
+        http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+        ">
 
     <tellstick:config name="tellstick"/>
 
-    <flow name="testGetDevices">
+    <flow name="get-devices">
         <tellstick:get-devices config-ref="tellstick"/>
     </flow>
+
+    <flow name="get-device">
+        <tellstick:get-device config-ref="tellstick" deviceId="#[payload]"/>
+    </flow>
+
+    <flow name="get-device-by-name">
+        <tellstick:get-device-by-name config-ref="tellstick" deviceName="#[payload]"/>
+    </flow>
+
+    <flow name="create-device">
+        <tellstick:create-device config-ref="tellstick" deviceName="#[payload.deviceName]" model="#[payload.model]"
+                                 protocol="#[payload.protocol]">
+            <tellstick:parameters ref="#[payload.parameters]"/>
+        </tellstick:create-device>
+    </flow>
+
+    <flow name="remove-device">
+        <tellstick:remove-device config-ref="tellstick" deviceId="#[payload]"/>
+    </flow>
+
+    <flow name="device-changed">
+        <tellstick:device-changed config-ref="tellstick"/>
+        <logger level="INFO" category="device-changed" message="Device ID #[payload.deviceId] changed"/>
+        <vm:outbound-endpoint path="device-changed"/>
+    </flow>
+
+    <flow name="device-added">
+        <tellstick:device-added config-ref="tellstick"/>
+        <logger level="INFO" category="device-added" message="Device ID #[payload.deviceId] added"/>
+        <vm:outbound-endpoint path="device-added"/>
+    </flow>
+
+    <flow name="device-removed">
+        <tellstick:device-removed config-ref="tellstick"/>
+        <logger level="INFO" category="device-removed" message="Device ID #[payload] removed"/>
+        <vm:outbound-endpoint path="device-removed"/>
+    </flow>
+
+    <flow name="on">
+        <tellstick:on config-ref="tellstick" deviceId="#[payload.deviceId]"/>
+    </flow>
+
+    <flow name="off">
+        <tellstick:off config-ref="tellstick" device-ref="#[payload.device]"/>
+    </flow>
+
+    <flow name="up">
+        <tellstick:up config-ref="tellstick" device-ref="#[payload.device]"/>
+    </flow>
+
+    <flow name="down">
+        <tellstick:down config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+    </flow>
+
+    <flow name="stop">
+        <tellstick:stop config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+    </flow>
+
+    <flow name="bell">
+        <tellstick:bell config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+    </flow>
+
+    <flow name="dim">
+        <tellstick:dim config-ref="tellstick" deviceName="#[payload.deviceName]" level="#[payload.level]"/>
+    </flow>
+
+    <flow name="execute">
+        <tellstick:execute config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+    </flow>
+
+    <flow name="raw-event">
+        <tellstick:raw-event config-ref="tellstick"/>
+        <logger level="INFO" category="raw-event" message="Raw event parameters: #[payload]"/>
+    </flow>
+
+    <flow name="get-sensors">
+        <tellstick:get-sensors config-ref="tellstick"/>
+    </flow>
+
+    <flow name="sensor-event">
+        <tellstick:sensor-event config-ref="tellstick"/>
+        <logger level="INFO" category="sensor-event" message="Sensor event: #[payload]"/>
+    </flow>
+
 </mule>

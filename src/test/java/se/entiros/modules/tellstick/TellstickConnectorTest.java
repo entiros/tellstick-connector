@@ -5,24 +5,167 @@
 
 package se.entiros.modules.tellstick;
 
+import org.hamcrest.Matcher;
+import org.junit.Before;
+import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
 import se.entiros.tellstick.core.device.Device;
 import org.mule.modules.tests.ConnectorTestCase;
 
 import org.junit.Test;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import static com.jayway.awaitility.Awaitility.await;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class TellstickConnectorTest extends ConnectorTestCase {
-    
+    private ReceiveThread deviceAddedThread = new ReceiveThread("vm://device-added");
+    private ReceiveThread deviceChangedThread = new ReceiveThread("vm://device-changed");
+    private ReceiveThread deviceRemovedThread = new ReceiveThread("vm://device-removed");
+
+    @Before
+    public void before() {
+        deviceAddedThread.reset();
+        deviceChangedThread.reset();
+        deviceRemovedThread.reset();
+    }
+
     @Override
     protected String getConfigResources() {
         return "tellstick-config.xml";
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void testGetDevices() throws Exception {
-        List<Device> devices = (List<Device>) runFlow("testGetDevices").getMessage().getPayload();
+        // Get devices
+        List<Device> devices = (List<Device>) runFlow("get-devices").getMessage().getPayload();
+        assertNotNull(devices);
+        assertTrue("Expecting at least one device", devices.size() > 0);
 
-        System.out.println(devices);
+        int deviceId = devices.get(0).getDeviceId();
+        String deviceName = devices.get(0).getName();
+        Device device;
+
+        // Get device by ID
+        device = (Device) runFlow("get-device", deviceId).getMessage().getPayload();
+        assertNotNull(device);
+        assertEquals(deviceName, device.getName());
+
+        // Get device by name
+        device = (Device) runFlow("get-device-by-name", deviceName).getMessage().getPayload();
+        assertNotNull(device);
+        assertEquals(deviceId, device.getDeviceId());
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testCreate() throws Exception {
+        int devicesBefore = ((List<Device>) runFlow("get-devices").getMessage().getPayload()).size();
+
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch");
+        payload.put("protocol", "arctech");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            // Expect device add and multiple changed events
+            deviceAddedThread.waitUntil(1);
+            deviceChangedThread.waitUntilAtleast(1);
+
+            // Number of devices is before + 1
+            assertEquals(devicesBefore + 1, ((List<Device>) runFlow("get-devices").getMessage().getPayload()).size());
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
+
+        // Expect device removed event
+        deviceRemovedThread.waitUntil(1);
+
+        int devicesAfter = ((List<Device>) runFlow("get-devices").getMessage().getPayload()).size();
+        assertEquals(devicesBefore, devicesAfter);
+    }
+
+    /**
+     * Helper class to receive from Mule
+     */
+    private class ReceiveThread extends Thread {
+        private List<MuleMessage> received = new CopyOnWriteArrayList<MuleMessage>();
+        private String address;
+        private boolean running = false;
+
+        public ReceiveThread(String address) {
+            this.address = address;
+        }
+
+        public void reset() {
+            // Clear received
+            received.clear();
+
+            // Already running
+            if (running) {
+                return;
+            }
+            // Start
+            else {
+                running = true;
+                start();
+            }
+        }
+
+        @Override
+        public void run() {
+            while (true) {
+                try {
+                    received.add(muleContext.getClient().request(address, RECEIVE_TIMEOUT));
+                } catch (MuleException e) {
+                    logger.warn("Error while receiving from " + address, e);
+                    break;
+                }
+            }
+        }
+
+        public List<MuleMessage> getReceived() {
+            return received;
+        }
+
+        public void waitUntilAtleast(int atleastCount) {
+            await().until(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    return received.size();
+                }
+            }, greaterThanOrEqualTo(atleastCount));
+        }
+
+        public void waitUntil(int exactCount) {
+            await().until(new Callable<Integer>() {
+                @Override
+                public Integer call() throws Exception {
+                    return received.size();
+                }
+            }, equalTo(exactCount));
+        }
     }
 }

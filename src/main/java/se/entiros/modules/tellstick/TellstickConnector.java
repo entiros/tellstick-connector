@@ -35,9 +35,10 @@ public class TellstickConnector {
 
     private Tellstick tellstick;
 
-
-    @Start
-    public void doStart() {
+    /**
+     * @Initialise is missing i Devkit 3.6.0, doing it in constructor
+     */
+    public TellstickConnector() {
         tellstick = new Tellstick();
         tellstick.start();
     }

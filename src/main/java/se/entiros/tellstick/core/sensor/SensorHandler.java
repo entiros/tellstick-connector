@@ -26,7 +26,7 @@ public class SensorHandler {
             TellstickCoreLibrary.TELLSTICK_WINDGUST,
     };
 
-    private final Set<SensorEventListener> sensorEventListeners = new CopyOnWriteArraySet<>();
+    private final Set<SensorEventListener> sensorEventListeners = new CopyOnWriteArraySet<SensorEventListener>();
 
     private final TellstickCoreLibrary library;
     private final int supportedDataTypes;
@@ -119,7 +119,7 @@ public class SensorHandler {
      * @return list of sensors
      */
     public List<Sensor> getSensors() {
-        List<Sensor> sensors = new ArrayList<>();
+        List<Sensor> sensors = new ArrayList<Sensor>();
 
         int protocolLen = 128;
         Pointer protocolPointer = new Memory(protocolLen);
@@ -160,7 +160,7 @@ public class SensorHandler {
      * @return data types
      */
     private List<Integer> getDataTypes(int dataTypes) {
-        List<Integer> result = new ArrayList<>();
+        List<Integer> result = new ArrayList<Integer>();
 
         for (int dataType : DATA_TYPES) {
             if ((getSupportedDataTypes() & dataType) != 0 && (dataTypes & dataType) != 0)
@@ -190,7 +190,7 @@ public class SensorHandler {
      * Sensor Event Listener
      */
     private class TDSensorEventListener implements TellstickCoreLibrary.TDSensorEvent {
-        private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<>();
+        private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>();
 
         @Override
         public void event(String protocol, String model, int id, int dataType, String value, int timestamp, int callbackId, Pointer context) {

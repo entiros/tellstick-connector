@@ -13,7 +13,7 @@ public class TellstickCoreParser {
     private static final Pattern EVENT_PATTERN = Pattern.compile("typedef void \\(WINAPI \\*(\\w+?)\\)\\s*?\\((.*?)\\);");
     private static final Pattern METHOD_PATTERN = Pattern.compile("TELLSTICK_API (.+?) WINAPI (\\w*?)\\((.*?)\\);");
 
-    private static final Map<String, String> ARGUMENT_REPLACE_MAP = new LinkedHashMap<>();
+    private static final Map<String, String> ARGUMENT_REPLACE_MAP = new LinkedHashMap<String, String>();
 
     static {
         ARGUMENT_REPLACE_MAP.put("const char *", "String ");
@@ -31,9 +31,9 @@ public class TellstickCoreParser {
     public TellstickCoreParser(File telldusCoreFile, File outputFile) throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(telldusCoreFile));
 
-        List<String> defines = new ArrayList<>();
-        List<String> events = new ArrayList<>();
-        List<String> methods = new ArrayList<>();
+        List<String> defines = new ArrayList<String>();
+        List<String> events = new ArrayList<String>();
+        List<String> methods = new ArrayList<String>();
 
         String line;
         while ((line = reader.readLine()) != null) {
@@ -139,7 +139,7 @@ public class TellstickCoreParser {
         if (string.isEmpty())
             return "";
 
-        List<String> arguments = new ArrayList<>();
+        List<String> arguments = new ArrayList<String>();
         String[] split = string.split(",");
 
         for (String arg : split) {

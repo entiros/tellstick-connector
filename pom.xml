@@ -23,6 +23,14 @@
     </properties>
 
     <dependencies>
+        <!-- Log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.17</version>
+            <scope>provided</scope>
+        </dependency>
+
         <!-- Apache Commons Lang -->
         <dependency>
             <groupId>org.apache.commons</groupId>

@@ -11,7 +11,9 @@
 <!-- END_INCLUDE(tellstick:get-device-by-name) -->
 
 <!-- BEGIN_INCLUDE(tellstick:create-device) -->
-    <tellstick:create-device name="#[payload.deviceName]" model="#[payload.model]" protocol="#[payload.protocol]" parameters-ref="#[payload.parameters]"/>
+    <tellstick:create-device config-ref="tellstick" deviceName="#[payload.deviceName]" model="#[payload.model]" protocol="#[payload.protocol]">
+        <tellstick:parameters ref="#[payload.parameters]"/>
+    </tellstick:create-device>
 <!-- END_INCLUDE(tellstick:create-device) -->
 
 <!-- BEGIN_INCLUDE(tellstick:remove-device) -->
@@ -26,7 +28,7 @@
 <!-- BEGIN_INCLUDE(tellstick:device-added) -->
     <tellstick:device-added/>
     <logger message="Device ID #[payload.deviceId] added"/>
-<!-- END_INCLUDE(tellstick:device-added) -->
+<!-- END_INCLUDE(tellstick:device-added) -->j
 
 <!-- BEGIN_INCLUDE(tellstick:device-removed) -->
     <tellstick:device-removed/>
@@ -37,9 +39,9 @@
     <tellstick:on deviceId="#[payload.deviceId]"/>
 <!-- END_INCLUDE(tellstick:on) -->
 
-<!-- BEGIN_INCLUDE(tellstick:up) -->
-    <tellstick:up device-ref="#[payload.device]"/>
-<!-- END_INCLUDE(tellstick:up) -->
+<!-- BEGIN_INCLUDE(tellstick:off) -->
+    <tellstick:off device-ref="#[payload.device]"/>
+<!-- END_INCLUDE(tellstick:off) -->
 
 <!-- BEGIN_INCLUDE(tellstick:up) -->
     <tellstick:up device-ref="#[payload.device]"/>
