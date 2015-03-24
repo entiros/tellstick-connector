@@ -5,16 +5,17 @@
 
 package se.entiros.modules.tellstick;
 
-import org.hamcrest.Matcher;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import se.entiros.tellstick.core.device.Device;
 import org.mule.modules.tests.ConnectorTestCase;
 
 import org.junit.Test;
+import se.entiros.tellstick.core.device.DeviceException;
+import se.entiros.tellstick.core.device.OnOffDevice;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,9 +25,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import static com.jayway.awaitility.Awaitility.await;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThanOrEqualTo;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class TellstickConnectorTest extends ConnectorTestCase {
     private ReceiveThread deviceAddedThread = new ReceiveThread("vm://device-added");
@@ -91,7 +90,7 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         try {
             // Expect device add and multiple changed events
             deviceAddedThread.waitUntil(1);
-            deviceChangedThread.waitUntilAtleast(1);
+            deviceChangedThread.waitUntilAtLeast(1);
 
             // Number of devices is before + 1
             assertEquals(devicesBefore + 1, ((List<Device>) runFlow("get-devices").getMessage().getPayload()).size());
@@ -105,6 +104,148 @@ public class TellstickConnectorTest extends ConnectorTestCase {
 
         int devicesAfter = ((List<Device>) runFlow("get-devices").getMessage().getPayload()).size();
         assertEquals(devicesBefore, devicesAfter);
+    }
+
+    @Test
+    @Ignore // requires Tellstick
+    public void testOnOff() throws Exception {
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch");
+        payload.put("protocol", "arctech");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            runFlow("off", device);
+            assertFalse(((OnOffDevice) runFlow("get-device", device.getDeviceId()).getMessage().getPayload()).isOn());
+
+            runFlow("on", device.getDeviceId());
+            assertTrue(((OnOffDevice) runFlow("get-device", device.getDeviceId()).getMessage().getPayload()).isOn());
+
+            runFlow("off", device);
+            assertFalse(((OnOffDevice) runFlow("get-device", device.getDeviceId()).getMessage().getPayload()).isOn());
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
+    }
+
+    @Test
+    @Ignore // requires Tellstick - I don't own a "up/down" device have been unable to test this
+    public void testUpDown() throws Exception {
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch:roxcore");
+        payload.put("protocol", "brateck");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            runFlow("up", device);
+            runFlow("down", device.getName());
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
+    }
+
+    @Test
+    @Ignore // requires Tellstick - I don't own a "bell" device have been unable to test this
+    public void testBell() throws Exception {
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch");
+        payload.put("protocol", "arctech");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            runFlow("bell", device.getName());
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
+    }
+
+    @Test
+    @Ignore // requires Tellstick - I don't own a "dim" device have been unable to test this
+    public void testDim() throws Exception {
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch");
+        payload.put("protocol", "arctech");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            Map<String, Object> params = new HashMap<String, Object>();
+            params.put("deviceName", device.getName());
+            params.put("level", 125);
+            runFlow("dim", params);
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
+    }
+
+
+    @Test
+    @Ignore // requires Tellstick - I don't own a "execute" device have been unable to test this
+    public void testExecute() throws Exception {
+        Map<String, Object> payload = new HashMap<String, Object>();
+        payload.put("deviceName", "test-device");
+        payload.put("model", "codeswitch");
+        payload.put("protocol", "arctech");
+
+        Map<String, String> parameters = new HashMap<String, String>();
+        parameters.put("house", "B");
+        parameters.put("unit", "2");
+        payload.put("parameters", parameters);
+
+        // Create device
+        Device device = (Device) runFlow("create-device", payload).getMessage().getPayload();
+        assertNotNull(device);
+        assertTrue(device.getDeviceId() > 0);
+
+        try {
+            runFlow("execute", device.getName());
+        } finally {
+            // Remove device (returns true if removed)
+            assertTrue((Boolean) runFlow("remove-device", device.getDeviceId()).getMessage().getPayload());
+        }
     }
 
     /**
@@ -150,13 +291,13 @@ public class TellstickConnectorTest extends ConnectorTestCase {
             return received;
         }
 
-        public void waitUntilAtleast(int atleastCount) {
+        public void waitUntilAtLeast(int atLeastCount) {
             await().until(new Callable<Integer>() {
                 @Override
                 public Integer call() throws Exception {
                     return received.size();
                 }
-            }, greaterThanOrEqualTo(atleastCount));
+            }, greaterThanOrEqualTo(atLeastCount));
         }
 
         public void waitUntil(int exactCount) {

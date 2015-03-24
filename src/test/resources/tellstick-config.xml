@@ -53,27 +53,27 @@
     </flow>
 
     <flow name="on">
-        <tellstick:on config-ref="tellstick" deviceId="#[payload.deviceId]"/>
+        <tellstick:on config-ref="tellstick" deviceId="#[payload]"/>
     </flow>
 
     <flow name="off">
-        <tellstick:off config-ref="tellstick" device-ref="#[payload.device]"/>
+        <tellstick:off config-ref="tellstick" device-ref="#[payload]"/>
     </flow>
 
     <flow name="up">
-        <tellstick:up config-ref="tellstick" device-ref="#[payload.device]"/>
+        <tellstick:up config-ref="tellstick" device-ref="#[payload]"/>
     </flow>
 
     <flow name="down">
-        <tellstick:down config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+        <tellstick:down config-ref="tellstick" deviceName="#[payload]"/>
     </flow>
 
     <flow name="stop">
-        <tellstick:stop config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+        <tellstick:stop config-ref="tellstick" deviceName="#[payload]"/>
     </flow>
 
     <flow name="bell">
-        <tellstick:bell config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+        <tellstick:bell config-ref="tellstick" deviceName="#[payload]"/>
     </flow>
 
     <flow name="dim">
@@ -81,7 +81,7 @@
     </flow>
 
     <flow name="execute">
-        <tellstick:execute config-ref="tellstick" deviceName="#[payload.deviceName]"/>
+        <tellstick:execute config-ref="tellstick" deviceName="#[payload]"/>
     </flow>
 
     <flow name="raw-event">
