@@ -10,6 +10,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
+import org.mule.api.lifecycle.LifecycleException;
 import org.mule.modules.tests.ConnectorTestCase;
 import se.entiros.tellstick.core.device.Device;
 import se.entiros.tellstick.core.device.OnOffDevice;
@@ -304,12 +305,19 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         @Override
         public void run() {
             while (true) {
+                if (muleContext == null)
+                    return;
+
                 try {
                     MuleMessage message = muleContext.getClient().request(address, RECEIVE_TIMEOUT);
                     if (message != null)
                         received.add(message);
                 } catch (MuleException e) {
-                    logger.warn("Error while receiving from " + address, e);
+                    if (e.getCause() != null && e.getCause() instanceof LifecycleException) {
+                        // Ignore
+                    } else {
+                        logger.warn("Error while receiving from " + address, e);
+                    }
                     break;
                 }
             }
