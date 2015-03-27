@@ -15,6 +15,7 @@ import org.mule.modules.tests.ConnectorTestCase;
 import org.junit.Test;
 import se.entiros.tellstick.core.device.DeviceException;
 import se.entiros.tellstick.core.device.OnOffDevice;
+import se.entiros.tellstick.core.sensor.Sensor;
 
 import java.util.HashMap;
 import java.util.List;
@@ -256,10 +257,27 @@ public class TellstickConnectorTest extends ConnectorTestCase {
     @Ignore // requires Tellstick
     public void testRawEvent() throws Exception {
         logger.info("================================================================================================");
-        logger.info("Trigger any device (remote, sensor, ...)");
+        logger.info("Trigger any device (remote, motion, temperature, ...)");
         logger.info("================================================================================================");
 
         rawEventThread.waitUntilAtLeast(1);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Test
+    public void testGetSensors() throws Exception {
+        List<Sensor> sensors = (List<Sensor>) runFlow("get-sensors").getMessage().getPayload();
+        assertNotNull(sensors);
+    }
+
+    @Test
+    @Ignore // requires Tellstick and active sensor
+    public void testSensorEvent() throws Exception {
+        logger.info("================================================================================================");
+        logger.info("Trigger any sensor (temperature etc)");
+        logger.info("================================================================================================");
+
+        sensorEventThread.waitUntilAtLeast(1);
     }
 
     /**
@@ -278,12 +296,8 @@ public class TellstickConnectorTest extends ConnectorTestCase {
             // Clear received
             received.clear();
 
-            // Already running
-            if (running) {
-                return;
-            }
-            // Start
-            else {
+            // Start if not already running
+            if (!running) {
                 running = true;
                 start();
             }
