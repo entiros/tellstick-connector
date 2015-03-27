@@ -1,12 +1,16 @@
 package se.entiros.tellstick.core.device;
 
-
+/**
+ * Device Event Listener
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public interface DeviceEventListener {
     /**
      * Device Changed
      *
      * @param deviceId device ID
-     * @param device device
+     * @param device   device
      */
     void deviceChanged(int deviceId, Device device);
 
@@ -14,7 +18,7 @@ public interface DeviceEventListener {
      * Device Added
      *
      * @param deviceId device ID
-     * @param device device
+     * @param device   device
      */
     void deviceAdded(int deviceId, Device device);
 

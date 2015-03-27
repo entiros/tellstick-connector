@@ -5,8 +5,8 @@ import se.entiros.tellstick.core.device.DeviceHandler;
 
 /**
  * Unsupported Device
- * <p/>
- * Created by Petter Alstermark on 2015-03-24.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public class UnsupportedDevice extends AbstractDevice {
     public UnsupportedDevice(DeviceHandler deviceHandler, int deviceId) {

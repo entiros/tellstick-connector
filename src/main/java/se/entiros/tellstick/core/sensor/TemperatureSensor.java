@@ -2,6 +2,11 @@ package se.entiros.tellstick.core.sensor;
 
 import se.entiros.tellstick.core.TellstickCoreLibrary;
 
+/**
+ * Temperature Sensor
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class TemperatureSensor extends Sensor {
 
     /**

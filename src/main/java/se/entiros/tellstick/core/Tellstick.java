@@ -7,6 +7,11 @@ import com.sun.jna.Native;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 
+/**
+ * Tellstick
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class Tellstick {
     private static final Logger logger = Logger.getLogger(Tellstick.class);
 

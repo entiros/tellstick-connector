@@ -4,13 +4,11 @@ import java.util.List;
 
 /**
  * Group Device
- * <p/>
- * Created by Petter Alstermark on 2014-11-06.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public interface GroupDevice extends OnOffDevice {
     /**
-     * Get Devices
-     *
      * @return devices
      */
     List<Device> getDevices();

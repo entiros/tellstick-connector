@@ -6,6 +6,11 @@ import se.entiros.tellstick.core.device.BellDevice;
 import se.entiros.tellstick.core.device.DeviceException;
 import se.entiros.tellstick.core.device.DeviceHandler;
 
+/**
+ * Bell device implementation
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class BellDeviceImpl extends AbstractDevice implements BellDevice {
 
     public BellDeviceImpl(DeviceHandler deviceHandler, int deviceId) {

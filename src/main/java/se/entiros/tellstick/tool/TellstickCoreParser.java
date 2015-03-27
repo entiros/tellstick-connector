@@ -7,6 +7,8 @@ import java.util.regex.Pattern;
 
 /**
  * Parse the telldus-core.h and output TelldusCoreLibrary.java Interface
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public class TellstickCoreParser {
     private static final Pattern DEFINE_PATTERN = Pattern.compile("#define ([\\w_]+?)\\s*?(-??[\\d]+?)");

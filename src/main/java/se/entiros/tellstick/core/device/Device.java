@@ -4,8 +4,8 @@ import se.entiros.tellstick.core.TellstickCoreLibrary;
 
 /**
  * Device
- * <p/>
- * Created by Petter Alstermark on 2014-11-06.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public interface Device extends Comparable<Device> {
     /**
@@ -39,15 +39,11 @@ public interface Device extends Comparable<Device> {
     int getStatus();
 
     /**
-     * Get Library
-     *
      * @return library
      */
     TellstickCoreLibrary getLibrary();
 
     /**
-     * Get Device Handler
-     *
      * @return device handler
      */
     DeviceHandler getDeviceHandler();

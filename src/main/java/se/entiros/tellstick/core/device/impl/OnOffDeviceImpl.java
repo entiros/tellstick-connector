@@ -6,6 +6,11 @@ import se.entiros.tellstick.core.device.DeviceException;
 import se.entiros.tellstick.core.device.DeviceHandler;
 import se.entiros.tellstick.core.device.OnOffDevice;
 
+/**
+ * OnOff device implementation
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class OnOffDeviceImpl extends AbstractDevice implements OnOffDevice {
 
     public OnOffDeviceImpl(DeviceHandler deviceHandler, int deviceId) {

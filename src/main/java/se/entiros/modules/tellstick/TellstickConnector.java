@@ -1,25 +1,19 @@
-/**
- * (c) 2003-2015 MuleSoft, Inc. The software in this package is published under the terms of the CPAL v1.0 license,
- * a copy of which has been included with this distribution in the LICENSE.md file.
- */
-
 package se.entiros.modules.tellstick;
 
+import org.apache.log4j.Logger;
+import org.mule.api.annotations.Module;
+import org.mule.api.annotations.Processor;
+import org.mule.api.annotations.Source;
+import org.mule.api.annotations.lifecycle.Stop;
+import org.mule.api.annotations.param.Optional;
+import org.mule.api.callback.SourceCallback;
+import org.mule.api.callback.StopSourceCallback;
 import se.entiros.tellstick.core.Tellstick;
 import se.entiros.tellstick.core.TellstickException;
 import se.entiros.tellstick.core.device.*;
 import se.entiros.tellstick.core.rawdevice.RawDeviceEventListener;
 import se.entiros.tellstick.core.sensor.Sensor;
 import se.entiros.tellstick.core.sensor.SensorEventListener;
-import org.apache.log4j.Logger;
-import org.mule.api.annotations.Module;
-import org.mule.api.annotations.Processor;
-import org.mule.api.annotations.Source;
-import org.mule.api.annotations.lifecycle.Start;
-import org.mule.api.annotations.lifecycle.Stop;
-import org.mule.api.annotations.param.Optional;
-import org.mule.api.callback.SourceCallback;
-import org.mule.api.callback.StopSourceCallback;
 
 import java.util.List;
 import java.util.Map;
@@ -27,7 +21,7 @@ import java.util.Map;
 /**
  * Tellstick Anypoint Connector
  *
- * @author Petter Alstermark
+ * @author Petter Alstermark, Entiros AB
  */
 @Module(name = "tellstick", friendlyName = "Tellstick", schemaVersion = "current", minMuleVersion = "3.5.0")
 public class TellstickConnector {
@@ -252,7 +246,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Turn device on, one of device, deviceId or deviceName is required
+     * Turn device on. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:on}
      *
@@ -268,7 +262,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Turn device off, one of device, deviceId or deviceName is required
+     * Turn device off. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:off}
      *
@@ -284,7 +278,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Issue device up command, one of device, deviceId or deviceName is required
+     * Issue device up command. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:up}
      *
@@ -300,7 +294,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Issue device down command, one of device, deviceId or deviceName is required
+     * Issue device down command. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:down}
      *
@@ -316,7 +310,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Issue device stop command, one of device, deviceId or deviceName is required
+     * Issue device stop command. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:stop}
      *
@@ -332,7 +326,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Issue device bell command, one of device, deviceId or deviceName is required
+     * Issue device bell command. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:bell}
      *
@@ -348,7 +342,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Set device dim level, one of device, deviceId or deviceName is required
+     * Set device dim level. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:dim}
      *
@@ -365,7 +359,7 @@ public class TellstickConnector {
     }
 
     /**
-     * Issue device execute command, one of device, deviceId or deviceName is required
+     * Issue device execute command. One of device, deviceId or deviceName is required
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:execute}
      *

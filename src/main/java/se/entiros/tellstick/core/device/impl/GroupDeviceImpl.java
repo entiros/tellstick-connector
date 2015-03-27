@@ -6,7 +6,11 @@ import se.entiros.tellstick.core.device.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Group device implementation
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class GroupDeviceImpl extends AbstractDevice implements GroupDevice {
     private final List<Device> devices = new ArrayList<Device>();
 

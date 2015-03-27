@@ -6,7 +6,11 @@ import se.entiros.tellstick.core.device.DeviceException;
 import se.entiros.tellstick.core.device.DeviceHandler;
 import se.entiros.tellstick.core.device.SceneDevice;
 
-
+/**
+ * Scene device implementation
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class SceneDeviceImpl extends AbstractDevice implements SceneDevice {
 
     public SceneDeviceImpl(DeviceHandler deviceHandler, int deviceId) {

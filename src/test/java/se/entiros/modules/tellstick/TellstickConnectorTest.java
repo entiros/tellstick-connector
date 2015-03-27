@@ -7,13 +7,11 @@ package se.entiros.modules.tellstick;
 
 import org.junit.Before;
 import org.junit.Ignore;
+import org.junit.Test;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
-import se.entiros.tellstick.core.device.Device;
 import org.mule.modules.tests.ConnectorTestCase;
-
-import org.junit.Test;
-import se.entiros.tellstick.core.device.DeviceException;
+import se.entiros.tellstick.core.device.Device;
 import se.entiros.tellstick.core.device.OnOffDevice;
 import se.entiros.tellstick.core.sensor.Sensor;
 

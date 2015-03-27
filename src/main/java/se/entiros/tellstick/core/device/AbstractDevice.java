@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 
 /**
  * Abstract Device
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public abstract class AbstractDevice implements Device {
     protected static final Logger logger = Logger.getLogger(AbstractDevice.class);
@@ -20,6 +22,10 @@ public abstract class AbstractDevice implements Device {
     private final String protocol;
     private final int deviceType;
 
+    /**
+     * @param deviceHandler device handler
+     * @param deviceId      device ID
+     */
     public AbstractDevice(DeviceHandler deviceHandler, int deviceId) {
         this.deviceHandler = deviceHandler;
         this.deviceId = deviceId;
@@ -99,8 +105,6 @@ public abstract class AbstractDevice implements Device {
     }
 
     /**
-     * Get Library
-     *
      * @return library
      */
     public TellstickCoreLibrary getLibrary() {
@@ -108,8 +112,6 @@ public abstract class AbstractDevice implements Device {
     }
 
     /**
-     * Get Device Handler
-     *
      * @return device handler
      */
     public DeviceHandler getDeviceHandler() {

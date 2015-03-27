@@ -1,8 +1,5 @@
 package se.entiros.tellstick.core.device;
 
-/**
- * Test On Off Device
- */
 public class TestOnOffDevice extends AbstractTestDevice implements OnOffDevice {
     public TestOnOffDevice(int deviceId, String name) {
         super(deviceId, name);

@@ -2,8 +2,8 @@ package se.entiros.tellstick.core.device;
 
 /**
  * Bell Device
- * <p/>
- * Created by Petter Alstermark on 2014-11-06.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public interface BellDevice extends Device {
     /**

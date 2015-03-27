@@ -1,7 +1,7 @@
 package se.entiros.tellstick.core.proxy;
 
-import se.entiros.tellstick.core.device.Device;
 import org.apache.log4j.Logger;
+import se.entiros.tellstick.core.device.Device;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
@@ -13,11 +13,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Device Proxy
- * <p/>
- * Add a "redelivery" to all void method calls
- * <p/>
- * Created by Petter Alstermark on 2014-11-06.
+ * Device Proxy to add "redelivery" to all methods that return void
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public final class DeviceProxy {
     private static final Logger logger = Logger.getLogger(DeviceProxy.class);

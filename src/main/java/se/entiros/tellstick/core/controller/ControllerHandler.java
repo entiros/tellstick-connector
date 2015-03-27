@@ -8,6 +8,11 @@ import org.apache.log4j.Logger;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Controller Handler
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class ControllerHandler {
     private static final Logger logger = Logger.getLogger(ControllerHandler.class);
 
@@ -25,21 +30,19 @@ public class ControllerHandler {
     }
 
     /**
-     * Add Sensor Event Listen
-     *
-     * @param listener
+     * @param listener controller event listener to add
+     * @return true if added
      */
-    public void addDeviceEventListener(ControllerEventListener listener) {
-        controllerEventListeners.add(listener);
+    public boolean addDeviceEventListener(ControllerEventListener listener) {
+        return controllerEventListeners.add(listener);
     }
 
     /**
-     * Remove Sensor Event Listener
-     *
-     * @param listener
+     * @param listener controller event listener to be removed
+     * @return true if removed
      */
-    public void removeDeviceEventListener(ControllerEventListener listener) {
-        controllerEventListeners.remove(listener);
+    public boolean removeDeviceEventListener(ControllerEventListener listener) {
+        return controllerEventListeners.remove(listener);
     }
 
     /**

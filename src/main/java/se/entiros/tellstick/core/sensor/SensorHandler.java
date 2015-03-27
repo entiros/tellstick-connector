@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Sensor handler
+ */
 public class SensorHandler {
     private static final Logger logger = Logger.getLogger(SensorHandler.class);
 
@@ -51,21 +54,19 @@ public class SensorHandler {
     }
 
     /**
-     * Add Sensor Event Listen
-     *
-     * @param listener sensor event listener
+     * @param listener sensor event listener to add
+     * @return true if added
      */
-    public void addSensorEventListener(SensorEventListener listener) {
-        sensorEventListeners.add(listener);
+    public boolean addSensorEventListener(SensorEventListener listener) {
+        return sensorEventListeners.add(listener);
     }
 
     /**
-     * Remove Sensor Event Listener
-     *
-     * @param listener sensor event listener
+     * @param listener sensor event listener to be removed
+     * @return true if removed
      */
-    public void removeSensorEventListener(SensorEventListener listener) {
-        sensorEventListeners.remove(listener);
+    public boolean removeSensorEventListener(SensorEventListener listener) {
+        return sensorEventListeners.remove(listener);
     }
 
     /**
@@ -114,8 +115,6 @@ public class SensorHandler {
     }
 
     /**
-     * Get Sensors
-     *
      * @return list of sensors
      */
     public List<Sensor> getSensors() {
@@ -154,10 +153,8 @@ public class SensorHandler {
     }
 
     /**
-     * Get data types from datatypes
-     *
      * @param dataTypes data types
-     * @return data types
+     * @return data types from dataTypes
      */
     private List<Integer> getDataTypes(int dataTypes) {
         List<Integer> result = new ArrayList<Integer>();

@@ -6,7 +6,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 
 /**
- * Generated: Thu Dec 19 22:03:07 CET 2013
+ * Generated
  */
 public interface TellstickCoreLibrary extends Library {
 

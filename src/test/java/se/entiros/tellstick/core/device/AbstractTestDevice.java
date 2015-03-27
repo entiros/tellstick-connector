@@ -2,11 +2,6 @@ package se.entiros.tellstick.core.device;
 
 import se.entiros.tellstick.core.TellstickCoreLibrary;
 
-/**
- * Abstract Test Device
- * <p/>
- * Created by Petter Alstermark on 2014-11-07.
- */
 public abstract class AbstractTestDevice implements Device {
     private int deviceId;
     private String name;

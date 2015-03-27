@@ -11,6 +11,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Raw Device Handler
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class RawDeviceHandler {
     private static final Logger logger = Logger.getLogger(RawDeviceHandler.class);
 

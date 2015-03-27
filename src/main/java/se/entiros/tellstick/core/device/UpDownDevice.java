@@ -2,8 +2,8 @@ package se.entiros.tellstick.core.device;
 
 /**
  * Up/Down Device
- * <p/>
- * Created by Petter Alstermark on 2014-11-06.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public interface UpDownDevice extends Device {
     /**

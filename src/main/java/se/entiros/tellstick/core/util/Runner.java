@@ -7,8 +7,8 @@ import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * Runner
- * <p/>
- * Created by Petter Alstermark on 2014-11-07.
+ *
+ * @author Petter Alstermark, Entiros AB
  */
 public class Runner {
     private static final Logger logger = Logger.getLogger(Runner.class);

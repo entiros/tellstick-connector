@@ -6,7 +6,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * Timeout handler
+ *
+ * @param <T>
+ * @author Petter Alstermark, Entiros AB
+ */
 public class TimeoutHandler<T> {
     protected static final Logger logger = Logger.getLogger(TimeoutHandler.class);
 

@@ -6,6 +6,11 @@ import se.entiros.tellstick.core.device.DeviceException;
 import se.entiros.tellstick.core.device.DeviceHandler;
 import se.entiros.tellstick.core.device.UpDownDevice;
 
+/**
+ * Up/Down device implementation
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class UpDownDeviceImpl extends AbstractDevice implements UpDownDevice {
 
     public UpDownDeviceImpl(DeviceHandler deviceHandler, int deviceId) {

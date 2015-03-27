@@ -15,11 +15,15 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+/**
+ * Device Handler
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class DeviceHandler {
     private static final Logger logger = Logger.getLogger(DeviceHandler.class);
 
     private final Set<DeviceEventListener> deviceEventListeners = new CopyOnWriteArraySet<DeviceEventListener>();
-//    private final Map<Integer, Device> devices = new ConcurrentHashMap<>();
 
     private final TellstickCoreLibrary library;
     private final int supportedMethods;
@@ -45,21 +49,19 @@ public class DeviceHandler {
     }
 
     /**
-     * Add Device Event Listen
-     *
-     * @param listener device event listener
+     * @param listener device event listener to add
+     * @return true if added
      */
-    public void addDeviceEventListener(DeviceEventListener listener) {
-        deviceEventListeners.add(listener);
+    public boolean addDeviceEventListener(DeviceEventListener listener) {
+        return deviceEventListeners.add(listener);
     }
 
     /**
-     * Remove Device Event Listener
-     *
-     * @param listener device event listener
+     * @param listener device event listener to be removed
+     * @return true if removed
      */
-    public void removeDeviceEventListener(DeviceEventListener listener) {
-        deviceEventListeners.remove(listener);
+    public boolean removeDeviceEventListener(DeviceEventListener listener) {
+        return deviceEventListeners.remove(listener);
     }
 
     /**
@@ -103,9 +105,7 @@ public class DeviceHandler {
     }
 
     /**
-     * Get Devices
-     *
-     * @return devices
+     * @return available devices
      */
     public List<Device> getDevices() {
         logger.trace("Get devices");
@@ -130,24 +130,16 @@ public class DeviceHandler {
     }
 
     /**
-     * Get Device
-     *
      * @param deviceId device ID
-     * @return device
+     * @return device for device ID
      * @throws DeviceNotSupportedException
      */
     public Device getDevice(int deviceId) throws DeviceNotSupportedException {
         return createDevice(deviceId);
-//        Device device = devices.get(deviceId);
-//        if (device == null) {
-//            device = createDevice(deviceId);
-//            devices.put(deviceId, device);
-//        }
-//        return device;
     }
 
     /**
-     * Create Device
+     * Create a Java Device class (not new device in Tellstick)
      *
      * @param deviceId device ID
      * @return device
@@ -205,13 +197,11 @@ public class DeviceHandler {
     }
 
     /**
-     * Create device
-     *
      * @param name       name
      * @param model      model
      * @param protocol   protocol
      * @param parameters parameters
-     * @return device
+     * @return created device
      * @throws TellstickException
      * @throws DeviceNotSupportedException
      */
@@ -247,9 +237,7 @@ public class DeviceHandler {
     }
 
     /**
-     * Remove device
-     *
-     * @param deviceId device ID
+     * @param deviceId device ID for device to be removed
      * @return true if device was removed
      */
     public boolean removeDevice(int deviceId) {
@@ -257,9 +245,7 @@ public class DeviceHandler {
     }
 
     /**
-     * Remove device
-     *
-     * @param device device
+     * @param device device to be removed
      * @return true if device was removed
      */
     public boolean removeDevice(Device device) {
@@ -334,18 +320,10 @@ public class DeviceHandler {
      * Device Event Listener
      */
     private class TDDeviceEventListener implements TellstickCoreLibrary.TDDeviceEvent {
-//        private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>();
-
         @Override
         public void event(int deviceId, int method, String data, int callbackId, Pointer context) {
             if (logger.isTraceEnabled())
                 logger.trace(String.format("Event: %d, %d", deviceId, method));
-
-            // String data = dataPointer.getString(0);
-
-            // Don't fire event to often
-//            if (!timeoutHandler.isReady(String.format("%d,%d,%s", deviceId, method, data)))
-//                return;
 
             // Debug log
             if (logger.isDebugEnabled())
@@ -363,16 +341,10 @@ public class DeviceHandler {
      * Device Change Event Listener
      */
     private class TDDeviceChangeEventListener implements TellstickCoreLibrary.TDDeviceChangeEvent {
-//        private final TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>();
-
         @Override
         public void event(int deviceId, int changeEvent, int changeType, int callbackId, Pointer context) {
             if (logger.isTraceEnabled())
                 logger.trace(String.format("Event: %d", deviceId));
-
-            // Don't fire event to often
-//            if (!timeoutHandler.isReady(String.format("%d,%d,%d", deviceId, changeEvent, changeType)))
-//                return;
 
             // Debug log
             if (logger.isDebugEnabled())

@@ -1,8 +1,11 @@
 package se.entiros.tellstick.core.sensor;
 
+/**
+ * Sensor
+ *
+ * @author Petter Alstermark, Entiros AB
+ */
 public class Sensor {
-    //	protocol: fineoffset, model: temperature, id: 199, dataType: 1, value: 11.3, timestamp: 1380376371, callbackId: 4
-
     private final String protocol;
     private final String model;
     private final int id;
@@ -10,6 +13,14 @@ public class Sensor {
     private final String value;
     private final long timestamp;
 
+    /**
+     * @param id        ID
+     * @param protocol  protocol
+     * @param model     model
+     * @param dataType  data type
+     * @param value     value
+     * @param timestamp timestamp
+     */
     public Sensor(int id, String protocol, String model, int dataType, String value, long timestamp) {
         this.protocol = protocol;
         this.model = model;
