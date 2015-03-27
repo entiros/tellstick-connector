@@ -30,7 +30,7 @@ public class DeviceHandlerTest {
         try {
             int numDevices = tellstick.getDeviceHandler().getDevices().size();
 
-            Map<String, String> parameters = new HashMap<>();
+            Map<String, String> parameters = new HashMap<String, String>();
             parameters.put("house", "A");
             parameters.put("unit", "2");
             device = tellstick.getDeviceHandler().createDevice("Test Device", "codeswitch", "arctech", parameters);

@@ -87,6 +87,7 @@
     <flow name="raw-event">
         <tellstick:raw-event config-ref="tellstick"/>
         <logger level="INFO" category="raw-event" message="Raw event parameters: #[payload]"/>
+        <vm:outbound-endpoint path="raw-event"/>
     </flow>
 
     <flow name="get-sensors">
@@ -96,6 +97,7 @@
     <flow name="sensor-event">
         <tellstick:sensor-event config-ref="tellstick"/>
         <logger level="INFO" category="sensor-event" message="Sensor event: #[payload]"/>
+        <vm:outbound-endpoint path="sensor-event"/>
     </flow>
 
 </mule>

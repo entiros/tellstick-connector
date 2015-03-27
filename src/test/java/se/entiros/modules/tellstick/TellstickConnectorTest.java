@@ -31,12 +31,16 @@ public class TellstickConnectorTest extends ConnectorTestCase {
     private ReceiveThread deviceAddedThread = new ReceiveThread("vm://device-added");
     private ReceiveThread deviceChangedThread = new ReceiveThread("vm://device-changed");
     private ReceiveThread deviceRemovedThread = new ReceiveThread("vm://device-removed");
+    private ReceiveThread rawEventThread = new ReceiveThread("vm://raw-event");
+    private ReceiveThread sensorEventThread = new ReceiveThread("vm://sensor-event");
 
     @Before
     public void before() {
         deviceAddedThread.reset();
         deviceChangedThread.reset();
         deviceRemovedThread.reset();
+        rawEventThread.reset();
+        sensorEventThread.reset();
     }
 
     @Override
@@ -248,6 +252,16 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         }
     }
 
+    @Test
+    @Ignore // requires Tellstick
+    public void testRawEvent() throws Exception {
+        logger.info("================================================================================================");
+        logger.info("Trigger any device (remote, sensor, ...)");
+        logger.info("================================================================================================");
+
+        rawEventThread.waitUntilAtLeast(1);
+    }
+
     /**
      * Helper class to receive from Mule
      */
@@ -279,7 +293,9 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         public void run() {
             while (true) {
                 try {
-                    received.add(muleContext.getClient().request(address, RECEIVE_TIMEOUT));
+                    MuleMessage message = muleContext.getClient().request(address, RECEIVE_TIMEOUT);
+                    if (message != null)
+                        received.add(message);
                 } catch (MuleException e) {
                     logger.warn("Error while receiving from " + address, e);
                     break;

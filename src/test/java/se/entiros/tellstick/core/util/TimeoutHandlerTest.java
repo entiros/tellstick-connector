@@ -10,7 +10,7 @@ public class TimeoutHandlerTest {
 
     @Test
     public void testIsReady() throws InterruptedException {
-        TimeoutHandler<String> timeoutHandler = new TimeoutHandler<>(500);
+        TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>(500);
 
         assertTrue(timeoutHandler.isReady(MY_VALUE));
         assertFalse(timeoutHandler.isReady(MY_VALUE));
@@ -23,7 +23,7 @@ public class TimeoutHandlerTest {
 
     @Test
     public void testClean() throws InterruptedException {
-        TimeoutHandler<String> timeoutHandler = new TimeoutHandler<>(2);
+        TimeoutHandler<String> timeoutHandler = new TimeoutHandler<String>(2);
 
         assertTrue(timeoutHandler.isReady(MY_VALUE));
 
