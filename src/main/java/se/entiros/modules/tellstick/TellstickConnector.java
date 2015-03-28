@@ -1,16 +1,19 @@
 package se.entiros.modules.tellstick;
 
 import org.apache.log4j.Logger;
+import org.mule.api.annotations.Configurable;
 import org.mule.api.annotations.Module;
 import org.mule.api.annotations.Processor;
 import org.mule.api.annotations.Source;
 import org.mule.api.annotations.lifecycle.Stop;
+import org.mule.api.annotations.param.Default;
 import org.mule.api.annotations.param.Optional;
 import org.mule.api.callback.SourceCallback;
 import org.mule.api.callback.StopSourceCallback;
 import se.entiros.tellstick.core.Tellstick;
 import se.entiros.tellstick.core.TellstickException;
 import se.entiros.tellstick.core.device.*;
+import se.entiros.tellstick.core.proxy.DeviceProxy;
 import se.entiros.tellstick.core.rawdevice.RawDeviceEventListener;
 import se.entiros.tellstick.core.sensor.Sensor;
 import se.entiros.tellstick.core.sensor.SensorEventListener;
@@ -28,6 +31,23 @@ public class TellstickConnector {
     private static final Logger logger = Logger.getLogger(TellstickConnector.class);
 
     private Tellstick tellstick;
+    private DeviceProxy proxy = new DeviceProxy();
+
+    /**
+     * If greater than one, a built in queue will trigger device commands (on,  off, ...) this number of times
+     */
+    @Configurable
+    @Optional
+    @Default("3")
+    private Integer tries;
+
+    /**
+     * Delay in milliseconds between device calls
+     */
+    @Configurable
+    @Optional
+    @Default("500")
+    private Integer delay;
 
     /**
      * @Initialise is missing i Devkit 3.6.0, doing it in constructor
@@ -35,6 +55,38 @@ public class TellstickConnector {
     public TellstickConnector() {
         tellstick = new Tellstick();
         tellstick.start();
+    }
+
+    /**
+     * @return number of tries for device commands
+     */
+    public Integer getTries() {
+        return tries;
+    }
+
+    /**
+     * @param tries number of tries for device commands
+     */
+    public void setTries(Integer tries) {
+        this.tries = tries;
+
+        proxy.setTries(tries);
+    }
+
+    /**
+     * @return delay in milliseconds between device calls
+     */
+    public Integer getDelay() {
+        return delay;
+    }
+
+    /**
+     * @param delay delay in milliseconds between device calls
+     */
+    public void setDelay(Integer delay) {
+        this.delay = delay;
+
+        proxy.setCallDelay(delay);
     }
 
     @Stop

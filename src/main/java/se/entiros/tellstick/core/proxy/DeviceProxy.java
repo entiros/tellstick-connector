@@ -17,10 +17,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  *
  * @author Petter Alstermark, Entiros AB
  */
-public final class DeviceProxy {
+public class DeviceProxy {
     private static final Logger logger = Logger.getLogger(DeviceProxy.class);
-
-    private static DeviceProxy instance;
 
     private final Map<Integer, DeviceMethodCall> deviceMethodCallsMap = new LinkedHashMap<Integer, DeviceMethodCall>();
     private final BlockingQueue<Integer> queue = new LinkedBlockingQueue<Integer>();
@@ -30,19 +28,8 @@ public final class DeviceProxy {
 
     private DeviceMethodCaller thread;
 
-    protected DeviceProxy() {
-    }
-
-    /**
-     * @return DeviceProxy
-     */
-    public static DeviceProxy getInstance() {
-        // Create new instance
-        if (instance == null) {
-            instance = new DeviceProxy();
-            instance.start();
-        }
-        return instance;
+    public DeviceProxy() {
+        start();
     }
 
     /**
@@ -149,7 +136,7 @@ public final class DeviceProxy {
      * @return proxied device
      */
     @SuppressWarnings("unchecked")
-    public <T extends Device> T doProxy(final T device, Class<T> targetClass) {
+    public <T extends Device> T proxy(final T device, Class<T> targetClass) {
         return (T) Proxy.newProxyInstance(device.getClass().getClassLoader(), new Class<?>[]{targetClass}, new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
@@ -164,15 +151,6 @@ public final class DeviceProxy {
                 }
             }
         });
-    }
-
-    /**
-     * @param device device
-     * @param <T>    device type
-     * @return proxied device
-     */
-    public static <T extends Device> T proxy(T device, Class<T> targetClass) {
-        return getInstance().doProxy(device, targetClass);
     }
 
     /**
