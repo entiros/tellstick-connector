@@ -536,7 +536,7 @@ public class TellstickConnector {
         }
         // By Device ID
         else if (deviceId != null) {
-            return (T) tellstick.getDeviceHandler().getDevice(deviceId);
+            return (T) getDevice(deviceId);
         }
         // By Device Name
         else {
