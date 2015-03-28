@@ -37,7 +37,6 @@ public class TellstickConnector {
      * If greater than one, a built in queue will trigger device commands (on,  off, ...) this number of times
      */
     @Configurable
-    @Optional
     @Default("3")
     private Integer tries;
 
@@ -45,7 +44,6 @@ public class TellstickConnector {
      * Delay in milliseconds between device calls
      */
     @Configurable
-    @Optional
     @Default("500")
     private Integer delay;
 
@@ -310,7 +308,7 @@ public class TellstickConnector {
      */
     @Processor(name = "on")
     public void deviceOn(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((OnOffDevice) getDevice(device, deviceId, deviceName)).on();
+        getDevice(device, deviceId, deviceName, OnOffDevice.class).on();
     }
 
     /**
@@ -326,7 +324,7 @@ public class TellstickConnector {
      */
     @Processor(name = "off")
     public void deviceOff(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((OnOffDevice) getDevice(device, deviceId, deviceName)).off();
+        getDevice(device, deviceId, deviceName, OnOffDevice.class).off();
     }
 
     /**
@@ -342,7 +340,7 @@ public class TellstickConnector {
      */
     @Processor(name = "up")
     public void deviceUp(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((UpDownDevice) getDevice(device, deviceId, deviceName)).up();
+        getDevice(device, deviceId, deviceName, UpDownDevice.class).up();
     }
 
     /**
@@ -358,7 +356,7 @@ public class TellstickConnector {
      */
     @Processor(name = "down")
     public void deviceDown(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((UpDownDevice) getDevice(device, deviceId, deviceName)).down();
+        getDevice(device, deviceId, deviceName, UpDownDevice.class).down();
     }
 
     /**
@@ -374,7 +372,7 @@ public class TellstickConnector {
      */
     @Processor(name = "stop")
     public void deviceStop(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((UpDownDevice) getDevice(device, deviceId, deviceName)).stop();
+        getDevice(device, deviceId, deviceName, UpDownDevice.class).stop();
     }
 
     /**
@@ -390,7 +388,7 @@ public class TellstickConnector {
      */
     @Processor(name = "bell")
     public void deviceBell(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((BellDevice) getDevice(device, deviceId, deviceName)).bell();
+        getDevice(device, deviceId, deviceName, BellDevice.class).bell();
     }
 
     /**
@@ -407,7 +405,7 @@ public class TellstickConnector {
      */
     @Processor(name = "dim")
     public void deviceDim(Integer level, @Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((DimmableDevice) getDevice(device, deviceId, deviceName)).dim(level);
+        getDevice(device, deviceId, deviceName, DimmableDevice.class).dim(level);
     }
 
     /**
@@ -423,7 +421,7 @@ public class TellstickConnector {
      */
     @Processor(name = "execute")
     public void deviceExecute(@Optional Device device, @Optional Integer deviceId, @Optional String deviceName) throws DeviceNotSupportedException, DeviceException {
-        ((SceneDevice) getDevice(device, deviceId, deviceName)).execute();
+        getDevice(device, deviceId, deviceName, SceneDevice.class).execute();
     }
 
     /**
@@ -578,22 +576,26 @@ public class TellstickConnector {
      * @throws DeviceNotSupportedException
      */
     @SuppressWarnings("unchecked")
-    protected <T extends Device> T getDevice(Device device, Integer deviceId, String deviceName) throws DeviceNotSupportedException {
+    protected <T extends Device> T getDevice(Device device, Integer deviceId, String deviceName, Class<T> deviceClass) throws DeviceNotSupportedException {
         if (deviceId == null && deviceName == null && device == null)
             throw new RuntimeException("One of deviceId, deviceName or device have to be specified");
 
+        T d;
+
         // Return device
         if (device != null) {
-            return (T) device;
+            d = (T) device;
         }
         // By Device ID
         else if (deviceId != null) {
-            return (T) getDevice(deviceId);
+            d = (T) getDevice(deviceId);
         }
         // By Device Name
         else {
-            return (T) getDeviceByName(deviceName);
+            d = (T) getDeviceByName(deviceName);
         }
+
+        return proxy.proxy(d, deviceClass);
     }
 
 }

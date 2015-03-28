@@ -34,6 +34,10 @@ public class TellstickConnectorTest extends ConnectorTestCase {
     private ReceiveThread rawEventThread = new ReceiveThread("vm://raw-event");
     private ReceiveThread sensorEventThread = new ReceiveThread("vm://sensor-event");
 
+    public TellstickConnectorTest() {
+        setDisposeContextPerClass(true);
+    }
+
     @Before
     public void before() {
         deviceAddedThread.reset();

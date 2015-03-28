@@ -16,6 +16,8 @@ import static org.junit.Assert.assertEquals;
 public class DeviceProxyTest {
     public static final int TRIES = 3;
 
+    private DeviceProxy proxy = new DeviceProxy();
+    
     public DeviceProxyTest() {
         Awaitility.setDefaultTimeout(5, TimeUnit.SECONDS);
     }
@@ -23,55 +25,55 @@ public class DeviceProxyTest {
     @Before
     public void before() {
         // Setup
-        DeviceProxy.getInstance().setCallDelay(250);
-        DeviceProxy.getInstance().setTries(TRIES);
-        DeviceProxy.getInstance().start();
+        proxy.setCallDelay(250);
+        proxy.setTries(TRIES);
+        proxy.start();
     }
 
     @After
     public void after() {
-        DeviceProxy.getInstance().stop();
+        proxy.stop();
     }
 
     @Test
     public void testBellDevice() throws Exception {
         TestBellDevice device = new TestBellDevice(1, "Test");
-        DeviceProxy.proxy(device, BellDevice.class).bell();
+        proxy.proxy(device, BellDevice.class).bell();
         assertExpectedCount(device);
     }
 
     @Test
     public void testDimmableDevice() throws Exception {
         TestDimmableDevice device = new TestDimmableDevice(1, "Test");
-        DeviceProxy.proxy(device, DimmableDevice.class).on();
+        proxy.proxy(device, DimmableDevice.class).on();
         assertExpectedCount(device);
     }
 
     @Test
     public void testGroupDevice() throws Exception {
         TestGroupDevice device = new TestGroupDevice(1, "Test");
-        DeviceProxy.proxy(device, GroupDevice.class).on();
+        proxy.proxy(device, GroupDevice.class).on();
         assertExpectedCount(device);
     }
 
     @Test
     public void testOnOffDevice() throws Exception {
         TestOnOffDevice device = new TestOnOffDevice(1, "Test");
-        DeviceProxy.proxy(device, OnOffDevice.class).on();
+        proxy.proxy(device, OnOffDevice.class).on();
         assertExpectedCount(device);
     }
 
     @Test
     public void testSceneDevice() throws Exception {
         TestSceneDevice device = new TestSceneDevice(1, "Test");
-        DeviceProxy.proxy(device, SceneDevice.class).execute();
+        proxy.proxy(device, SceneDevice.class).execute();
         assertExpectedCount(device);
     }
 
     @Test
     public void testUpDownDevice() throws Exception {
         TestUpDownDevice device = new TestUpDownDevice(1, "Test");
-        DeviceProxy.proxy(device, UpDownDevice.class).up();
+        proxy.proxy(device, UpDownDevice.class).up();
         assertExpectedCount(device);
     }
 
@@ -86,12 +88,12 @@ public class DeviceProxyTest {
         TestSceneDevice sceneDevice = new TestSceneDevice(++deviceId, "Test");
         TestUpDownDevice upDownDevice = new TestUpDownDevice(++deviceId, "Test");
 
-        DeviceProxy.proxy(bellDevice, BellDevice.class).bell();
-        DeviceProxy.proxy(dimmableDevice, DimmableDevice.class).on();
-        DeviceProxy.proxy(groupDevice, GroupDevice.class).on();
-        DeviceProxy.proxy(onOffDevice, OnOffDevice.class).on();
-        DeviceProxy.proxy(sceneDevice, SceneDevice.class).execute();
-        DeviceProxy.proxy(upDownDevice, UpDownDevice.class).up();
+        proxy.proxy(bellDevice, BellDevice.class).bell();
+        proxy.proxy(dimmableDevice, DimmableDevice.class).on();
+        proxy.proxy(groupDevice, GroupDevice.class).on();
+        proxy.proxy(onOffDevice, OnOffDevice.class).on();
+        proxy.proxy(sceneDevice, SceneDevice.class).execute();
+        proxy.proxy(upDownDevice, UpDownDevice.class).up();
 
         assertExpectedCount(bellDevice);
         assertExpectedCount(dimmableDevice);
@@ -103,11 +105,11 @@ public class DeviceProxyTest {
 
     @Test
     public void testOverride() throws Exception {
-        DeviceProxy.getInstance().setCallDelay(500);
+        proxy.setCallDelay(500);
 
         final TestOnOffDevice onOffDevice = new TestOnOffDevice(0, "Test");
 
-        DeviceProxy.proxy(onOffDevice, OnOffDevice.class).on();
+        proxy.proxy(onOffDevice, OnOffDevice.class).on();
 
         // Wait for one try
         await().until(new Callable<Integer>() {
@@ -117,7 +119,7 @@ public class DeviceProxyTest {
             }
         }, equalTo(2));
 
-        DeviceProxy.proxy(onOffDevice, OnOffDevice.class).off();
+        proxy.proxy(onOffDevice, OnOffDevice.class).off();
 
         Thread.sleep(600 * 3);
         assertEquals(-1, onOffDevice.getCounter());
