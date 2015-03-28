@@ -34,10 +34,12 @@ public class TellstickConnector {
     private DeviceProxy proxy = new DeviceProxy();
 
     /**
-     * If greater than one, a built in queue will trigger device commands (on,  off, ...) this number of times
+     * A built in queue will trigger device commands (on,  off, ...) giver number of times.
+     * Some signals may be missed by receiving devices (interference by other devices etc), so repeating the command is
+     * often helpful.
      */
     @Configurable
-    @Default("3")
+    @Default("1")
     private Integer tries;
 
     /**
