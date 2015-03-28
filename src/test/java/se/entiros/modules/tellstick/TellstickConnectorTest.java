@@ -260,6 +260,8 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         logger.info("================================================================================================");
 
         rawEventThread.waitUntilAtLeast(1);
+
+        Thread.sleep(5000);
     }
 
     @SuppressWarnings("unchecked")
@@ -277,6 +279,47 @@ public class TellstickConnectorTest extends ConnectorTestCase {
         logger.info("================================================================================================");
 
         sensorEventThread.waitUntilAtLeast(1);
+    }
+
+    @Test
+    public void testMatchesMap() {
+        Map<String, String> actual = new HashMap<String, String>();
+        actual.put("a", "1");
+        actual.put("b", "2");
+
+        assertTrue(TellstickConnector.matches(null, actual));
+
+        Map<String, String> expected = new HashMap<String, String>();
+        assertTrue(TellstickConnector.matches(expected, actual));
+
+        expected.put("a", "2");
+        assertFalse(TellstickConnector.matches(expected, actual));
+
+        expected.put("a", "1");
+        assertTrue(TellstickConnector.matches(expected, actual));
+
+        expected.put("b", "1");
+        assertFalse(TellstickConnector.matches(expected, actual));
+
+        expected.put("b", "2");
+        assertTrue(TellstickConnector.matches(expected, actual));
+
+        expected.put("c", "3");
+        assertFalse(TellstickConnector.matches(expected, actual));
+    }
+
+    @Test
+    public void testMatchesInteger() {
+        assertTrue(TellstickConnector.matches(null, 1));
+        assertTrue(TellstickConnector.matches(1, 1));
+        assertFalse(TellstickConnector.matches(2, 1));
+    }
+
+    @Test
+    public void testMatchesString() {
+        assertTrue(TellstickConnector.matches(null, "1"));
+        assertTrue(TellstickConnector.matches("1", "1"));
+        assertFalse(TellstickConnector.matches("2", "1"));
     }
 
     /**

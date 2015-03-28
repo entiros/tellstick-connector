@@ -379,19 +379,27 @@ public class TellstickConnector {
      * <p/>
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:raw-event}
      *
-     * @param callback the callback where raw event will be processed as parameter {@link java.util.Map}
+     * @param callback   the callback where raw event will be processed as parameter {@link java.util.Map}
+     * @param parameters expected parameters for a event to trigger (null or empty for all events)
      * @return stop source callback
      */
     @Source
-    public StopSourceCallback rawEvent(final SourceCallback callback) {
+    public StopSourceCallback rawEvent(final SourceCallback callback, @Optional final Map<String, String> parameters) {
         // Device Listener
         final RawDeviceEventListener listener = new RawDeviceEventListener() {
             @Override
-            public void rawDeviceEvent(Map<String, String> parameters) {
+            public void rawDeviceEvent(Map<String, String> params) {
                 try {
-                    callback.process(parameters);
+                    // Process if expected parameters matches
+                    if (matches(parameters, params)) {
+                        callback.process(params);
+                    }
+                    // Debug log if filtered
+                    else if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Filtered raw event: %s", params));
+                    }
                 } catch (Exception e) {
-                    logger.error(String.format("Error when processing raw event '%s'", parameters));
+                    logger.error(String.format("Error when processing raw event '%s'", params));
                 }
             }
         };
@@ -426,17 +434,37 @@ public class TellstickConnector {
      * {@sample.xml ../../../doc/tellstick-connector.xml.sample tellstick:sensor-event}
      *
      * @param callback the callback where sensor event will be processed as {@link se.entiros.tellstick.core.sensor.Sensor}
+     * @param id       expected ID for event to trigger
+     * @param protocol expected protocol for event to trigger
+     * @param model    expected model for event to trigger
+     * @param dataType expected dataType for event to trigger
+     * @param value    expected value for event to trigger
      * @return stop source callback
      */
     @Source
-    public StopSourceCallback sensorEvent(final SourceCallback callback) {
+    public StopSourceCallback sensorEvent(final SourceCallback callback,
+                                          @Optional final Integer id,
+                                          @Optional final String protocol,
+                                          @Optional final String model,
+                                          @Optional final Integer dataType,
+                                          @Optional final String value) {
         // Device Listener
         final SensorEventListener listener = new SensorEventListener() {
-
             @Override
             public void sensorEvent(Sensor sensor) {
                 try {
-                    callback.process(sensor);
+                    // Process if expected parameters matches
+                    if (matches(id, sensor.getId()) &&
+                            matches(protocol, sensor.getProtocol()) &&
+                            matches(model, sensor.getModel()) &&
+                            matches(dataType, sensor.getDataType()) &&
+                            matches(value, sensor.getValue())) {
+                        callback.process(sensor);
+                    }
+                    // Debug log if filtered
+                    else if (logger.isDebugEnabled()) {
+                        logger.debug(String.format("Filtered sensor event: %s", sensor));
+                    }
                 } catch (Exception e) {
                     logger.error(String.format("Error when processing sensor event '%s'", sensor));
                 }
@@ -453,6 +481,41 @@ public class TellstickConnector {
                 tellstick.getSensorHandler().removeSensorEventListener(listener);
             }
         };
+    }
+
+    /**
+     * @param expected   expected parameters
+     * @param parameters parameters
+     * @return true if all expected parameters matches in parameters, or if expected is null
+     */
+    protected static boolean matches(Map<String, String> expected, Map<String, String> parameters) {
+        if (expected == null)
+            return true;
+
+        for (Map.Entry<String, String> entry : expected.entrySet()) {
+            if (!entry.getValue().equals(parameters.get(entry.getKey())))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param expected expected value
+     * @param value    value
+     * @return true if expected value equals value or null
+     */
+    protected static boolean matches(Integer expected, Integer value) {
+        return expected == null || expected.equals(value);
+    }
+
+    /**
+     * @param expected expected value
+     * @param value    value
+     * @return true if expected value equals value or null
+     */
+    protected static boolean matches(String expected, String value) {
+        return expected == null || expected.equals(value);
     }
 
     /**
